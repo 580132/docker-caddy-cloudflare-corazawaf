@@ -12,7 +12,7 @@ updates:
 
   # Maintain dependencies within Dockerfiles
   # Check for Caddy updates daily
-  - package-ecosystem: docker1
+  - package-ecosystem: npm
     directory: /
     target-branch: dev  # <--- 关键：必须在这里也加上这一行！
     schedule:
