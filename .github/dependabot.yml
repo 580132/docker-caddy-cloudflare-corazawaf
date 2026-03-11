@@ -12,8 +12,3 @@ updates:
 
   # Maintain dependencies within Dockerfiles
   # Check for Caddy updates daily
-  - package-ecosystem: docker
-    directory: /
-    target-branch: dev  # <--- 关键：必须在这里也加上这一行！
-    schedule:
-      interval: daily
