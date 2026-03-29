@@ -267,7 +267,6 @@ jobs:
           IMAGE_NAME: ${{ needs.metadata.outputs.image-name }}
           IMAGE_DIGEST: ${{ steps.publish.outputs.digest }}
         run: |
-          cosign sign --yes --recursive "docker.io/$IMAGE_NAME@$IMAGE_DIGEST"
           cosign sign --yes --recursive "ghcr.io/$IMAGE_NAME@$IMAGE_DIGEST"
 
       # This will automatically attach the SBOM to the release
