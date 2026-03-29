@@ -28,8 +28,8 @@ jobs:
         uses: actions/checkout@v4 # 升级到稳定版 v4
 
       - name: Scan repo filesystem
-        uses: aquasecurity/trivy-action@0.29.0 # 使用具体版本号更稳定
-        continue-on-error: true # 关键：即使扫描本身崩溃也不影响后续
+        uses: aquasecurity/trivy-action@18f251a5aa9a6dae48f34428611643994bb3c8d5 # 指向 v0.29.0 的哈希
+        continue-on-error: true
         with:
           scan-type: fs
           format: sarif
@@ -74,14 +74,13 @@ jobs:
           echo "image-ref=$IMAGE_REF" | tee -a "$GITHUB_OUTPUT"
 
       - name: Scan image
-        uses: aquasecurity/trivy-action@0.29.0
-        continue-on-error: true # 关键：防止 Trivy 运行异常拦截 Publish
+        uses: aquasecurity/trivy-action@18f251a5aa9a6dae48f34428611643994bb3c8d5 # 同上
+        continue-on-error: true
         with:
           image-ref: ${{ steps.normalize.outputs.image-ref }}
           format: sarif
           output: trivy-results-img.sarif
           exit-code: "0"
-          severity: "CRITICAL,HIGH" # 重点关注严重漏洞
 
       - name: Upload scan results
         uses: github/codeql-action/upload-sarif@v3
