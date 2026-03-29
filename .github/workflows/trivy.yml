@@ -14,6 +14,8 @@ on:
 env:
   DOCKER_BUILDKIT: "1"
   COSIGN_EXPERIMENTAL: "1"
+  # 添加下面这一行来消除 Node.js 20 的弃用警告
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   trivy-fs:
