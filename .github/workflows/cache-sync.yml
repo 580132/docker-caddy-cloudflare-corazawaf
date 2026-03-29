@@ -4,9 +4,7 @@ name: PR Cache Sync
 
 on:
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [main, dev]
     types:
       - closed
     paths:

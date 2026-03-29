@@ -3,7 +3,7 @@ name: DockerHub README Sync
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths:
       - README.md
 

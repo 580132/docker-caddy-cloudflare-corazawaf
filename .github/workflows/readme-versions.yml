@@ -3,7 +3,7 @@ name: README Versions
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches: [main]
+    branches: [main, dev]
     paths:
       - Dockerfile
 
