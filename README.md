@@ -1,4 +1,4 @@
-# 🐳 caddy-cloudflare
+# 🐳 caddy-cloudflare-corazawaf
 
 [![DockerHub](https://img.shields.io/badge/DockerHub-iarekylew00t%2Fcaddy--cloudflare-blue?style=flat)](https://hub.docker.com/r/iarekylew00t/caddy-cloudflare)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/IAreKyleW00t/docker-caddy-cloudflare?label=Latest%20Version)](https://github.com/IAreKyleW00t/docker-caddy-cloudflare/tags)
@@ -6,9 +6,11 @@
 [![License](https://img.shields.io/github/license/IAreKyleW00t/docker-caddy-cloudflare)](https://github.com/IAreKyleW00t/docker-caddy-cloudflare/blob/main/LICENSE)
 [![Dependabot](https://img.shields.io/badge/Dependabot-0366d6?style=flat&logo=dependabot&logoColor=white)](.github/dependabot.yml)
 
-The [Caddy](https://hub.docker.com/_/caddy) Docker image with the added
-[caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare) module for
-DNS-01 ACME validation support.  
+The [Caddy](https://hub.docker.com/_/caddy) Docker image with the following additional modules:
+
+- **[caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare)** - For DNS-01 ACME validation support
+- **[corazawaf/coraza-caddy](https://github.com/corazawaf/coraza-caddy)** - Web Application Firewall (WAF) powered by [Coraza](https://github.com/corazawaf/coraza)
+
 Built for the same platforms as the upstream Caddy project (except Windows, sorry)!
 
 > [!NOTE]
@@ -29,6 +31,7 @@ The following tags are the latest available for the
 `iarekylew00t/caddy-cloudflare` image.
 
 <!--START-TAGS-->
+
 - [`latest`](https://github.com/580132/docker-caddy-cloudflare/tree/v2.10.3)
 - [`2.10.3`](https://github.com/580132/docker-caddy-cloudflare/tree/v2.10.3)
 - [`2.10`](https://github.com/580132/docker-caddy-cloudflare/tree/v2.10)
@@ -107,6 +110,51 @@ or via JSON
 See the [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare) module
 and [`tls`](https://caddyserver.com/docs/caddyfile/directives/tls#tls) directive
 for advanced usage.
+
+### Coraza WAF
+
+This image includes the **Coraza Web Application Firewall** (WAF) module for
+protecting your web applications. You can enable and configure it in your
+`Caddyfile`:
+
+```Caddyfile
+{
+  acme_dns cloudflare {env.CF_API_TOKEN}
+}
+
+example.com {
+  coraza {
+    # Enable request body inspection
+    request_body_access on
+    # Enable response body inspection
+    response_body_access on
+    # Set maximum request body size (default 10MB)
+    request_body_limit 134217728
+    # Set maximum response body size (default 512KB)
+    response_body_limit 524288
+    # Load OWASP Core Rule Set
+    include @coreruleset/crs-setup.conf.example
+    include @coreruleset/rules/*.conf
+  }
+  reverse_proxy http://your-app:8080
+}
+```
+
+You can also configure it with custom rules:
+
+```Caddyfile
+example.com {
+  coraza {
+    # Basic WAF rules
+    rule "id:1, phase:1, deny, status:403, log, msg:Block malicious request"
+    rule "id:2, phase:2, deny, status:403, log, msg:SQL injection detected" "ARGS|/select.*from/i"
+  }
+  reverse_proxy http://your-app:8080
+}
+```
+
+See the [coraza-caddy](https://github.com/corazawaf/coraza-caddy) module and
+[Coraza Documentation](https://coraza.io/) for advanced usage.
 
 ### Creating a Cloudflare API Token
 
