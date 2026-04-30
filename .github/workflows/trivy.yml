@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Scan repo filesystem
-        uses: aquasecurity/trivy-action@0.28.0 # 经过验证的稳定版本号（无 v）
+        uses: aquasecurity/trivy-action@v0.36.0 # 经过验证的稳定版本号（无 v）
         continue-on-error: true
         with:
           scan-type: fs
@@ -74,7 +74,7 @@ jobs:
           echo "image-ref=$IMAGE_REF" | tee -a "$GITHUB_OUTPUT"
 
       - name: Scan image
-        uses: aquasecurity/trivy-action@0.28.0 # 同上
+        uses: aquasecurity/trivy-action@v0.36.0 # 同上
         continue-on-error: true
         with:
           image-ref: ${{ steps.normalize.outputs.image-ref }}
